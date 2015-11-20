@@ -8,7 +8,7 @@ ConversionError::~ConversionError() {
 
 }
 
-const char *ConversionError::what() const {
+const char *ConversionError::what() const noexcept {
     return _what.c_str();
 }
 
