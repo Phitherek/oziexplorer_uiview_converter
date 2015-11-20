@@ -12,6 +12,8 @@ Gtk::MenuItem* aboutitem = NULL;
 Gtk::MenuItem* quititem = NULL;
 Gtk::Button* inchooserbutton = NULL;
 Gtk::Button* outchooserbutton = NULL;
+Gtk::Entry* inchooserentry = NULL;
+Gtk::Entry* outchooserentry = NULL;
 
 void onAboutMenuItemClick() {
     aboutdialog->run();
@@ -27,21 +29,33 @@ void closeAboutDialog() {
 }
 
 void openInChooserDialog() {
+    if(inchooserentry->get_text() != "") {
+        inchooserdialog->set_current_folder(inchooserentry->get_text());
+    }
     inchooserdialog->run();
 }
 
 void openOutChooserDialog() {
+    if(outchooserentry->get_text() != "") {
+        outchooserdialog->set_current_folder(outchooserentry->get_text());
+    }
     outchooserdialog->run();
 }
 
 void inChooserDialogResponse(int response_id) {
-    if(response_id == Gtk::RESPONSE_CANCEL || response_id == Gtk::RESPONSE_DELETE_EVENT) {
+    if(response_id == Gtk::RESPONSE_CANCEL) {
+        inchooserdialog->close();
+    } else if(response_id == Gtk::RESPONSE_OK) {
+        inchooserentry->set_text(inchooserdialog->get_current_folder());
         inchooserdialog->close();
     }
 }
 
 void outChooserDialogResponse(int response_id) {
-    if(response_id == Gtk::RESPONSE_CANCEL || response_id == Gtk::RESPONSE_DELETE_EVENT) {
+    if(response_id == Gtk::RESPONSE_CANCEL) {
+        outchooserdialog->close();
+    } else if(response_id == Gtk::RESPONSE_OK) {
+        outchooserentry->set_text(outchooserdialog->get_current_folder());
         outchooserdialog->close();
     }
 }
@@ -69,5 +83,7 @@ int main(int argc, char** argv) {
     outchooserbutton->signal_clicked().connect(sigc::ptr_fun(&openOutChooserDialog));
     inchooserdialog->signal_response().connect(sigc::ptr_fun(&inChooserDialogResponse));
     outchooserdialog->signal_response().connect(sigc::ptr_fun(&outChooserDialogResponse));
+    builder->get_widget("inchooserentry", inchooserentry);
+    builder->get_widget("outchooserentry", outchooserentry);
     return app->run(*mainwindow);
 }
