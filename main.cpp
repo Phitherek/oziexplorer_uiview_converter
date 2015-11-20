@@ -7,9 +7,19 @@ using namespace std;
 Gtk::ApplicationWindow* mainwindow;
 Gtk::AboutDialog* aboutdialog;
 Gtk::MenuItem* aboutitem;
+Gtk::MenuItem* quititem;
 
 void onAboutMenuItemClick() {
     aboutdialog->run();
+    aboutdialog->close();
+}
+
+void closeMainWindow() {
+    mainwindow->close();
+}
+
+void closeAboutDialog() {
+    aboutdialog->close();
 }
 
 int main(int argc, char** argv) {
@@ -24,5 +34,8 @@ int main(int argc, char** argv) {
     aboutitem = NULL;
     builder->get_widget("aboutitem", aboutitem);
     aboutitem->signal_activate().connect(sigc::ptr_fun(&onAboutMenuItemClick));
+    quititem = NULL;
+    builder->get_widget("quititem", quititem);
+    quititem->signal_activate().connect(sigc::ptr_fun(&closeMainWindow));
     return app->run(*mainwindow);
 }
