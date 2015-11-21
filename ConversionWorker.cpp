@@ -10,6 +10,7 @@
 #include "ConversionError.h"
 #include <sstream>
 #include <gtkmm/progressbar.h>
+#include <iostream>
 
 ConversionWorker::ConversionWorker(): _indir(""), _outdir(""), _cont(false), _mutex(), _thread(0), _builder(0), _conversionlogbuffer(0) {}
 
@@ -65,9 +66,9 @@ void ConversionWorker::run() {
             output.replace(output.length()-3, 3, "inf");
             std::stringstream status;
             status.str("");
-            status << i << "/" << inputs.size()-1;
+            status << i+1 << "/" << inputs.size();
             conversionprogress->set_text(status.str());
-            conversionprogressbar->set_fraction(static_cast<double>(i)/inputs.size());
+            conversionprogressbar->set_fraction(static_cast<double>(i+1)/inputs.size());
             _conversionlogbuffer->insert_at_cursor("Converting file " + inputs[i] + "... ");
             conversionlogtextview->set_buffer(_conversionlogbuffer);
             Converter conv(input, output);
