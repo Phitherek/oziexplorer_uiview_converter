@@ -7,7 +7,7 @@ This is a small program that converts OziExplorer .map map file info format to U
 
 ## Versions
 
-This is a master branch which can contain features that are in testing and/or incomplete. All released versions have their appropriate tags. Current stable version is 0.1.1.
+This is a master branch which can contain features that are in testing and/or incomplete. All released versions have their appropriate tags. Current stable version is 0.1.2.
 
 ## Dependencies
 
@@ -29,6 +29,10 @@ cmake -G"Generator name" .
 This program is licensed under the MIT License. See LICENSE file for details.
 
 ## Changelog
+
+#### v. 0.1.2
+
+* Included cstdlib in Converter for std::atof fix.
 
 #### v. 0.1.1
 
