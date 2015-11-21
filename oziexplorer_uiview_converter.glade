@@ -268,12 +268,12 @@ Author: Phitherek_ SO9PH
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="conversionlevelupperbox">
+                  <object class="GtkBox" id="conversionprogressupperbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkLabel" id="conversionlevellabel">
+                      <object class="GtkLabel" id="conversionprogresslabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Conversion progress:</property>
@@ -285,13 +285,14 @@ Author: Phitherek_ SO9PH
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="conversionlevelbox">
+                      <object class="GtkBox" id="conversionprogressbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkLevelBar" id="conversionlevelbar">
+                          <object class="GtkProgressBar" id="conversionprogressbar">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="valign">center</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
