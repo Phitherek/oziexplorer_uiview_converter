@@ -80,10 +80,10 @@ void Converter::convert() {
     double fullon;
     double flrlat;
     double flrlon;
-    fullat = atof(upperleftlat.c_str());
-    fullon = atof(upperleftlon.c_str());
-    flrlat = atof(lowerrightlat.c_str());
-    flrlon = atof(lowerrightlon.c_str());
+    fullat = std::atof(upperleftlat.c_str());
+    fullon = std::atof(upperleftlon.c_str());
+    flrlat = std::atof(lowerrightlat.c_str());
+    flrlon = std::atof(lowerrightlon.c_str());
     char fullatdir;
     char fullondir;
     char flrlatdir;
