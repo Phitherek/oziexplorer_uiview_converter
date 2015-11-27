@@ -30,6 +30,11 @@ This program is licensed under the MIT License. See LICENSE file for details.
 
 ## Changelog
 
+#### v. 0.2
+
+* Fixed coordinate conversion thanks to new information from SP9MZM and SP9TPL.
+* Added a delay between the conversions, so that the GUI crashes less often.
+
 #### v. 0.1.2
 
 * Included cstdlib in Converter for std::atof fix.

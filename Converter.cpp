@@ -114,29 +114,21 @@ void Converter::convert() {
         flrlondir = 'E';
     }
     int fullat_deg;
-    int fullat_min;
-    int fullat_sec;
+    double fullat_min;
     int fullon_deg;
-    int fullon_min;
-    int fullon_sec;
+    double fullon_min;
     int flrlat_deg;
-    int flrlat_min;
-    int flrlat_sec;
+    double flrlat_min;
     int flrlon_deg;
-    int flrlon_min;
-    int flrlon_sec;
+    double flrlon_min;
     fullat_deg = static_cast<int>(trunc(fullat));
-    fullat_min = static_cast<int>(trunc(fullat*60))%60;
-    fullat_sec = static_cast<int>(trunc(fullat*3600))%60;
+    fullat_min = (fullat - fullat_deg)*60;
     fullon_deg = static_cast<int>(trunc(fullon));
-    fullon_min = static_cast<int>(trunc(fullon*60))%60;
-    fullon_sec = static_cast<int>(trunc(fullon*3600))%60;
+    fullon_min = (fullon-fullon_deg)*60;
     flrlat_deg = static_cast<int>(trunc(flrlat));
-    flrlat_min = static_cast<int>(trunc(flrlat*60))%60;
-    flrlat_sec = static_cast<int>(trunc(flrlat*3600))%60;
+    flrlat_min = (flrlat-flrlat_deg)*60;
     flrlon_deg = static_cast<int>(trunc(flrlon));
-    flrlon_min = static_cast<int>(trunc(flrlon*60))%60;
-    flrlon_sec = static_cast<int>(trunc(flrlon*3600))%60;
+    flrlon_min = (flrlon-flrlon_deg)*60;
     std::ofstream out(_outfilename.c_str());
     if(!out) {
         throw ConversionError("Could not open output file: " + _outfilename + "!");
@@ -145,22 +137,22 @@ void Converter::convert() {
     for(int i = 0; i < 10; i++) {
         buffer[i] = '\000';
     }
-    sprintf(buffer, "%02d.%02d.%02d%c", fullat_deg, fullat_min, fullat_sec, fullatdir);
+    sprintf(buffer, "%02d.%02.2f%c", fullat_deg, fullat_min, fullatdir);
     out << buffer << ", ";
     for(int i = 0; i < 10; i++) {
         buffer[i] = '\000';
     }
-    sprintf(buffer, "%03d.%02d.%02d%c", fullon_deg, fullon_min, fullon_sec, fullondir);
+    sprintf(buffer, "%03d.%02.2f%c", fullon_deg, fullon_min, fullondir);
     out << buffer << std::endl;
     for(int i = 0; i < 10; i++) {
         buffer[i] = '\000';
     }
-    sprintf(buffer, "%02d.%02d.%02d%c", flrlat_deg, flrlat_min, flrlat_sec, flrlatdir);
+    sprintf(buffer, "%02d.%02.2f%c", flrlat_deg, flrlat_min, flrlatdir);
     out << buffer << ", ";
     for(int i = 0; i < 10; i++) {
         buffer[i] = '\000';
     }
-    sprintf(buffer, "%03d.%02d.%02d%c", flrlon_deg, flrlon_min, flrlon_sec, flrlondir);
+    sprintf(buffer, "%03d.%02.2f%c", flrlon_deg, flrlon_min, flrlondir);
     out << buffer << std::endl;
     out << "OziExplorer to UI-View(C)SO9PH" << std::endl;
     out.close();

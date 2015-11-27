@@ -11,6 +11,8 @@
 #include <sstream>
 #include <gtkmm/progressbar.h>
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 ConversionWorker::ConversionWorker(): _indir(""), _outdir(""), _cont(false), _mutex(), _thread(0), _builder(0), _conversionlogbuffer(0) {}
 
@@ -19,6 +21,8 @@ ConversionWorker::~ConversionWorker() {
     Glib::Threads::Mutex::Lock lock(_mutex);
     _cont = false;
     _thread->join();
+    _conversionlogbuffer.reset();
+    _builder.reset();
 }
 
 
@@ -48,8 +52,11 @@ void ConversionWorker::run() {
         }
     }
     if(_cont) {
-        _conversionlogbuffer->insert_at_cursor("Starting conversion...\n");
-        conversionlogtextview->set_buffer(_conversionlogbuffer);
+        {
+            Glib::Threads::Mutex::Lock lock(_mutex);
+            _conversionlogbuffer->insert_at_cursor("Starting conversion...\n");
+            conversionlogtextview->set_buffer(_conversionlogbuffer);
+        }
         Glib::Dir dir(_indir);
         std::vector<std::string> dirContents, inputs, outputs;
         dirContents.assign(dir.begin(), dir.end());
@@ -67,31 +74,44 @@ void ConversionWorker::run() {
             std::stringstream status;
             status.str("");
             status << i+1 << "/" << inputs.size();
-            conversionprogress->set_text(status.str());
-            conversionprogressbar->set_fraction(static_cast<double>(i+1)/inputs.size());
-            _conversionlogbuffer->insert_at_cursor("Converting file " + inputs[i] + "... ");
-            conversionlogtextview->set_buffer(_conversionlogbuffer);
+            {
+                Glib::Threads::Mutex::Lock lock(_mutex);
+                conversionprogress->set_text(status.str());
+                conversionprogressbar->set_fraction(static_cast<double>(i+1)/inputs.size());
+                _conversionlogbuffer->insert_at_cursor("Converting file " + inputs[i] + "... ");
+                conversionlogtextview->set_buffer(_conversionlogbuffer);
+            }
             Converter conv(input, output);
             try {
                 conv.convert();
-                _conversionlogbuffer->insert_at_cursor("Success!\n");
-                conversionlogtextview->set_buffer(_conversionlogbuffer);
+                {
+                    Glib::Threads::Mutex::Lock lock(_mutex);
+                    _conversionlogbuffer->insert_at_cursor("Success!\n");
+                    conversionlogtextview->set_buffer(_conversionlogbuffer);
+                }
             } catch(ConversionError& e) {
                 std::string err = "";
                 err += "\nError! ";
                 err += e.what();
                 err += "\n";
-                _conversionlogbuffer->insert_at_cursor(err);
-                conversionlogtextview->set_buffer(_conversionlogbuffer);
+                {
+                    Glib::Threads::Mutex::Lock lock(_mutex);
+                    _conversionlogbuffer->insert_at_cursor(err);
+                    conversionlogtextview->set_buffer(_conversionlogbuffer);
+                }
             }
             i++;
+            std::this_thread::sleep_for(std::chrono::milliseconds(75));
         }
-        if(i == inputs.size()) {
-            _conversionlogbuffer->insert_at_cursor("Conversion done!\n");
-            conversionlogtextview->set_buffer(_conversionlogbuffer);
-        } else {
-            _conversionlogbuffer->insert_at_cursor("Conversion cancelled!\n");
-            conversionlogtextview->set_buffer(_conversionlogbuffer);
+        {
+            Glib::Threads::Mutex::Lock lock(_mutex);
+            if(i == inputs.size()) {
+                _conversionlogbuffer->insert_at_cursor("Conversion done!\n");
+                conversionlogtextview->set_buffer(_conversionlogbuffer);
+            } else {
+                _conversionlogbuffer->insert_at_cursor("Conversion cancelled!\n");
+                conversionlogtextview->set_buffer(_conversionlogbuffer);
+            }
         }
         _cont = false;
         sig_done();

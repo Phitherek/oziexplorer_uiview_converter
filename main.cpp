@@ -21,6 +21,8 @@ Gtk::Button* startconversionbutton = NULL;
 Gtk::Button* cancelconversionbutton = NULL;
 ConversionWorker* worker;
 Glib::RefPtr<Gtk::Builder> builder;
+Glib::RefPtr<Gtk::TextView> conversionlogtextview;
+Glib::RefPtr<Gtk::TextBuffer> conversionlogtextbuffer;
 
 void onAboutMenuItemClick() {
     aboutdialog->run();
