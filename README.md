@@ -7,7 +7,7 @@ This is a small program that converts OziExplorer .map map file info format to U
 
 ## Versions
 
-This is a master branch which can contain features that are in testing and/or incomplete. All released versions have their appropriate tags. Current stable version is 0.1.2.
+This is a master branch which can contain features that are in testing and/or incomplete. All released versions have their appropriate tags. Current stable version is 0.3.
 
 ## Dependencies
 
@@ -29,6 +29,10 @@ cmake -G"Generator name" .
 This program is licensed under the MIT License. See LICENSE file for details.
 
 ## Changelog
+
+#### v. 0.3
+
+* Split into main GTK+ 3.0 version and GTK+ 2.0 compatibility version.
 
 #### v. 0.2
 
