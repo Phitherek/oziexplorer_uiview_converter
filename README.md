@@ -11,7 +11,7 @@ This is a master branch which can contain features that are in testing and/or in
 
 ## Dependencies
 
-* GTKmm >= 3.0 (dynamic runtime libraries)
+* GTKmm >= 3.0 (dynamic runtime libraries) (see the gtk2 version if you need compatibility with older systems)
 
 ## Build dependencies
 
